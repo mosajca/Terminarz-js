@@ -8,8 +8,14 @@
   "license": "",
   "main": "app.js",
   "dependencies": {
+    "angular": "^1.7.9",
+    "angular-animate": "^1.7.9",
+    "angular-aria": "^1.7.9",
+    "angular-material": "^1.1.20",
+    "angular-messages": "^1.7.9",
     "express": "^4.12.3",
-    "swagger-express-mw": "^0.1.0"
+    "swagger-express-mw": "^0.1.0",
+    "thinkagain": "^0.1.6"
   },
   "devDependencies": {
     "should": "^7.1.0",
