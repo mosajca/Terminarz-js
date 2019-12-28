@@ -18,6 +18,48 @@ consumes:
 produces:
   - application/json
 paths:
+  /:
+    x-swagger-router-controller: homepage
+    get:
+      operationId: homepage
+      produces:
+        - text/html; charset=utf-8
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+  /material.css:
+    x-swagger-router-controller: homepage
+    get:
+      operationId: material_css
+      produces:
+        - text/css; charset=utf-8
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+  /libs/{folder}/{name}:
+    x-swagger-router-controller: libs
+    get:
+      operationId: fileserve
+      parameters:
+        - name: folder
+          type: string
+          in: path
+          required: true
+        - name: name
+          type: string
+          in: path
+          required: true
+      produces:
+        - text/javascript; charset=utf-8
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
   /events:
       x-swagger-router-controller: event
       get:
