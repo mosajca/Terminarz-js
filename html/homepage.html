@@ -16,6 +16,12 @@
             <md-button class="md-primary md-raised md-hue-1" ng-click="showAddDialog($event)">
                 Dodaj wydarzenie
             </md-button>
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showLoginDialog($event)">
+                Zaloguj
+            </md-button>
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showRegisterDialog($event)">
+                Zarejestruj
+            </md-button>
         </div>
     </md-toolbar>
 
@@ -69,6 +75,39 @@
                                 "startDateTime": data[2].toISOString(),
                                 "endDateTime": data[3].toISOString()
                             });
+                        }, function () { });
+                };
+                $scope.showLoginDialog = function (event) {
+                    $mdDialog.show({
+                        controller: function ($scope, $mdDialog) {
+                            $scope.cancel = function () { $mdDialog.cancel(); }
+                            $scope.login = function (data) { $mdDialog.hide(data); }
+                            $scope.name = null;
+                            $scope.password = null;
+                        },
+                        templateUrl: "/templates/login.html",
+                        parent: angular.element(document.body),
+                        targetEvent: event,
+                        clickOutsideToClose: true
+                    })
+                        .then(function (data) {
+                        }, function () { });
+                };
+                $scope.showRegisterDialog = function (event) {
+                    $mdDialog.show({
+                        controller: function ($scope, $mdDialog) {
+                            $scope.cancel = function () { $mdDialog.cancel(); }
+                            $scope.register = function (data) { $mdDialog.hide(data); }
+                            $scope.name = null;
+                            $scope.password1 = null;
+                            $scope.password2 = null;
+                        },
+                        templateUrl: "/templates/register.html",
+                        parent: angular.element(document.body),
+                        targetEvent: event,
+                        clickOutsideToClose: true
+                    })
+                        .then(function (data) {
                         }, function () { });
                 };
             });

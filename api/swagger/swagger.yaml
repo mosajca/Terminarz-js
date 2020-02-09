@@ -29,15 +29,6 @@ paths:
           description: Success
           schema:
             type: string
-  /favicon.ico:
-    x-swagger-router-controller: homepage
-    get:
-      operationId: favicon
-      responses:
-        200:
-          description: Success
-          schema:
-            type: file
   /material.css:
     x-swagger-router-controller: homepage
     get:

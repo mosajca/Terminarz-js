@@ -5,7 +5,6 @@ const path = require('path');
 
 module.exports = {
     homepage,
-    favicon,
     material_css,
     templates,
     libs
@@ -16,11 +15,6 @@ function homepage(req, res, next) {
     const contents = fs.readFileSync(file, 'utf8');
     res.contentType('text/html');
     res.send(contents);
-}
-
-function favicon(req, res, next) {
-    const file = path.join(__dirname, '..', '..', 'html', 'favicon.ico');
-    res.sendFile(file);
 }
 
 function material_css(req, res, next) {

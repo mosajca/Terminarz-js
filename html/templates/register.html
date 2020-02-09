@@ -1,0 +1,19 @@
+<md-dialog>
+    <md-dialog-content class="md-dialog-content">
+        <h2>Zarejestruj</h2>
+        <md-input-container class="md-block">
+            <input type="text" ng-model="name" placeholder="Nazwa użytkownika" required>
+        </md-input-container>
+        <md-input-container class="md-block">
+            <input type="password" ng-model="password1" placeholder="Hasło" required>
+        </md-input-container>
+        <md-input-container class="md-block">
+            <input type="password" ng-model="password2" placeholder="Potwierdź hasło" required>
+        </md-input-container>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button ng-click="register([name, password1, password2])" class="md-primary"
+            ng-disabled="!(name && password1 && password2)">Zarejestruj</md-button>
+        <md-button ng-click="cancel()" class="md-primary">Anuluj</md-button>
+    </md-dialog-actions>
+</md-dialog>
