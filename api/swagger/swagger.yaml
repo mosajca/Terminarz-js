@@ -29,6 +29,15 @@ paths:
           description: Success
           schema:
             type: string
+  /favicon.ico:
+    x-swagger-router-controller: homepage
+    get:
+      operationId: favicon
+      responses:
+        200:
+          description: Success
+          schema:
+            type: file
   /material.css:
     x-swagger-router-controller: homepage
     get:
@@ -40,10 +49,26 @@ paths:
           description: Success
           schema:
             type: string
-  /libs/{folder}/{name}:
-    x-swagger-router-controller: libs
+  /templates/{name}:
+    x-swagger-router-controller: homepage
     get:
-      operationId: fileserve
+      operationId: templates
+      parameters:
+        - name: name
+          type: string
+          in: path
+          required: true
+      produces:
+        - text/html; charset=utf-8
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+  /libs/{folder}/{name}:
+    x-swagger-router-controller: homepage
+    get:
+      operationId: libs
       parameters:
         - name: folder
           type: string

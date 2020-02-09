@@ -1,41 +1,78 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="utf-8">
     <title>Terminarz</title>
     <link rel="stylesheet" href="/material.css">
+    <link rel="icon" href="/favicon.ico">
 </head>
 
 <body ng-app="App" layout="column">
 
-<md-toolbar>Terminarz</md-toolbar>
-<div class="container" layout="row" flex>    
-    <md-content id="content" flex>
-        <md-list ng-controller='EventController'>
-            <md-list-item ng-repeat='e in events'>
-                Wydarzenie:<br/>
-                id: {{e.id}}<br/>
-                Nazwa: {{e.name}}<br/>
-                Opis: {{e.description}}<br/>
-                Początek: {{e.startDateTime}}<br/>
-                Koniec: {{e.endDateTime}}<br/><br/>
-            </md-list-item>
-        </md-list>
-    </md-content>
-</div>
+    <md-toolbar ng-controller="ToolbarController">
+        <div class="md-toolbar-tools">
+            <h2 flex>Terminarz</h2>
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showAddDialog($event)">
+                Dodaj wydarzenie
+            </md-button>
+        </div>
+    </md-toolbar>
 
-<script src="/libs/angular/angular.min.js"></script>
-<script src="/libs/angular-animate/angular-animate.min.js"></script>
-<script src="/libs/angular-aria/angular-aria.min.js"></script>
-<script src="/libs/angular-material/angular-material.min.js"></script>
-<script>
-    angular.module('App', ['ngMaterial'])
-        .controller('EventController', function($scope, $http){
-            $http.get('http://localhost:10010/events')
-                .then(function(response){
-                    $scope.events = response.data
-                });
-        });
-</script>
+    <div class="container" layout="row" flex>
+        <md-content id="content" flex>
+            <md-list ng-controller="EventController">
+                <md-list-item ng-repeat="e in events">
+                    Wydarzenie:<br />
+                    id: {{e.id}}<br />
+                    Nazwa: {{e.name}}<br />
+                    Opis: {{e.description}}<br />
+                    Początek: {{e.startDateTime}}<br />
+                    Koniec: {{e.endDateTime}}<br /><br />
+                </md-list-item>
+            </md-list>
+        </md-content>
+    </div>
+
+    <script src="/libs/angular/angular.min.js"></script>
+    <script src="/libs/angular-animate/angular-animate.min.js"></script>
+    <script src="/libs/angular-aria/angular-aria.min.js"></script>
+    <script src="/libs/angular-material/angular-material.min.js"></script>
+    <script>
+        angular.module("App", ["ngMaterial"])
+            .controller("EventController", function ($scope, $http) {
+                $http.get("http://localhost:10010/events")
+                    .then(function (response) {
+                        $scope.events = response.data;
+                    });
+            })
+            .controller("ToolbarController", function ($scope, $http, $mdDialog) {
+                $scope.showAddDialog = function (event) {
+                    $mdDialog.show({
+                        controller: function ($scope, $mdDialog) {
+                            $scope.cancel = function () { $mdDialog.cancel(); }
+                            $scope.addEvent = function (data) { $mdDialog.hide(data); }
+                            $scope.name = null;
+                            $scope.description = null;
+                            $scope.startDateTime = null;
+                            $scope.endDateTime = null;
+                        },
+                        templateUrl: "/templates/add_event.html",
+                        parent: angular.element(document.body),
+                        targetEvent: event,
+                        clickOutsideToClose: true
+                    })
+                        .then(function (data) {
+                            $http.post("http://localhost:10010/events", {
+                                "name": data[0],
+                                "description": data[1],
+                                "startDateTime": data[2].toISOString(),
+                                "endDateTime": data[3].toISOString()
+                            });
+                        }, function () { });
+                };
+            });
+    </script>
 </body>
+
 </html>
