@@ -4,18 +4,22 @@ const model = require('../model/model.js');
 const r = require('thinkagain')().r;
 
 module.exports = {
-    createEvent,
-    readEvent,
-    readEvents,
-    updateEvent,
-    deleteEvent
+    createUser,
+    readUser,
+    readUsers,
+    updateUser,
+    deleteUser,
+    logout
 };
 
-function createEvent(req, res, next) {
-    const value = req.swagger.params.event.value;
-    value.userId = req.session.userId;
-    r.db('Schedule').table('Event').insert(
-            value, {returnChanges: true}
+function logout(req, res, next) {
+    req.session = null;
+    res.json('logout');
+}
+
+function createUser(req, res, next) {
+    r.db('Schedule').table('User').insert(
+            req.swagger.params.user.value, {returnChanges: true}
         ).run().then(
         function (result) {
             res.json(get_new(result));
@@ -23,9 +27,20 @@ function createEvent(req, res, next) {
     );
 }
 
-function readEvent(req, res, next) {
-    r.db('Schedule').table('Event')
-        .get(req.swagger.params.id.value)
+function readUser(req, res, next) {
+    r.db('Schedule').table('User')
+        .filter({name: req.swagger.params.id.value})
+        /*.get(req.swagger.params.id.value)*/
+        .run().then(
+        function (result) {
+            req.session.userId = result[0].id;
+            res.json(result[0]);
+        }
+    );
+}
+
+function readUsers(req, res, next) {
+    r.db('Schedule').table('User')
         .run().then(
         function (result) {
             res.json(result);
@@ -33,18 +48,9 @@ function readEvent(req, res, next) {
     );
 }
 
-function readEvents(req, res, next) {
-    r.db('Schedule').table('Event')
-        .run().then(
-        function (result) {
-            res.json(result);
-        }
-    );
-}
-
-function updateEvent(req, res, next) {
-    r.db('Schedule').table('Event').get(req.swagger.params.id.value)
-        .update(req.swagger.params.event.value, {returnChanges: true})
+function updateUser(req, res, next) {
+    r.db('Schedule').table('User').get(req.swagger.params.id.value)
+        .update(req.swagger.params.user.value, {returnChanges: true})
         .run().then(
         function (result) {
             res.json(get_new(result));
@@ -52,8 +58,8 @@ function updateEvent(req, res, next) {
     );
 }
 
-function deleteEvent(req, res, next) {
-    r.db('Schedule').table('Event')
+function deleteUser(req, res, next) {
+    r.db('Schedule').table('User')
         .get(req.swagger.params.id.value).delete({returnChanges: true})
         .run().then(
         function (result) {

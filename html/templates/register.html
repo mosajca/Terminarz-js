@@ -13,7 +13,7 @@
     </md-dialog-content>
     <md-dialog-actions>
         <md-button ng-click="register([name, password1, password2])" class="md-primary"
-            ng-disabled="!(name && password1 && password2)">Zarejestruj</md-button>
+            ng-disabled="!(name && password1 && password2 && password1 === password2)">Zarejestruj</md-button>
         <md-button ng-click="cancel()" class="md-primary">Anuluj</md-button>
     </md-dialog-actions>
 </md-dialog>

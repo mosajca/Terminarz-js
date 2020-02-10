@@ -22,6 +22,9 @@
             <md-button class="md-primary md-raised md-hue-1" ng-click="showRegisterDialog($event)">
                 Zarejestruj
             </md-button>
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showLogoutDialog($event)">
+                Wyloguj
+            </md-button>
         </div>
     </md-toolbar>
 
@@ -91,6 +94,10 @@
                         clickOutsideToClose: true
                     })
                         .then(function (data) {
+                            $http.get("http://localhost:10010/users/" + data[0])
+                                .then(function (response) {
+                                    console.log(response);
+                                });
                         }, function () { });
                 };
                 $scope.showRegisterDialog = function (event) {
@@ -108,7 +115,23 @@
                         clickOutsideToClose: true
                     })
                         .then(function (data) {
+                            $http.post("http://localhost:10010/users", {
+                                "name": data[0],
+                                "password": data[1]
+                            });
                         }, function () { });
+                };
+                $scope.showLogoutDialog = function (event) {
+                    var confirm = $mdDialog.confirm()
+                      .title('Czy na pewno chcesz się wylogować?')
+                      .targetEvent(event)
+                      .ok('Wyloguj')
+                      .cancel('Anuluj');
+
+                    $mdDialog.show(confirm).then(function() {
+                      $http.delete("http://localhost:10010/users");
+                    }, function() {
+                    });
                 };
             });
     </script>
