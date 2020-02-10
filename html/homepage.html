@@ -29,15 +29,29 @@
     </md-toolbar>
 
     <div class="container" layout="row" flex>
+        <md-sidenav md-is-locked-open="true">
+            <div ng-controller="CalendarController">
+                <md-calendar ng-model="date" ng-change="log()" md-date-filter="filter"></md-calendar>
+            </div>
+        </md-sidenav>
         <md-content id="content" flex>
             <md-list ng-controller="EventController">
                 <md-list-item ng-repeat="e in events">
-                    Wydarzenie:<br />
-                    id: {{e.id}}<br />
-                    Nazwa: {{e.name}}<br />
-                    Opis: {{e.description}}<br />
-                    Początek: {{e.startDateTime}}<br />
-                    Koniec: {{e.endDateTime}}<br /><br />
+                    <md-card style="max-width: 50%">
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span class="md-headline">{{e.name}}</span>
+                            </md-card-title-text>
+                        </md-card-title>
+                        <md-card-content>
+                            <p>{{e.startDateTime | date:'dd/MM/yyyy HH:mm'}} - {{e.endDateTime | date:'dd/MM/yyyy HH:mm'}}</p>
+                            <p>{{e.description}}</p>
+                        </md-card-content>
+                        <md-card-actions layout="row" layout-align="end center">
+                            <md-button ng-click="showEditDialog($event, e)">Edytuj</md-button>
+                            <md-button ng-click="showDeleteDialog($event, e.id)">Usuń</md-button>
+                        </md-card-actions>
+                    </md-card>
                 </md-list-item>
             </md-list>
         </md-content>
@@ -49,11 +63,56 @@
     <script src="/libs/angular-material/angular-material.min.js"></script>
     <script>
         angular.module("App", ["ngMaterial"])
-            .controller("EventController", function ($scope, $http) {
+            .controller("EventController", function ($scope, $http, $mdDialog) {
                 $http.get("http://localhost:10010/events")
                     .then(function (response) {
                         $scope.events = response.data;
                     });
+                $scope.showDeleteDialog = function (event, eventId) {
+                    var confirm = $mdDialog.confirm()
+                        .title('Czy na pewno chcesz usunąć?')
+                        .targetEvent(event)
+                        .ok('Usuń')
+                        .cancel('Anuluj');
+
+                    $mdDialog.show(confirm).then(function() {
+                        $http.delete("http://localhost:10010/events/" + eventId);
+                    }, function() {
+                    });
+                };
+                $scope.showEditDialog = function (event, e) {
+                    $mdDialog.show({
+                        controller: function ($scope, $mdDialog) {
+                            $scope.cancel = function () { $mdDialog.cancel(); }
+                            $scope.addEvent = function (data) { $mdDialog.hide(data); }
+                            $scope.name = e.name;
+                            $scope.description = e.description;
+                            $scope.startDateTime = new Date(e.startDateTime);
+                            $scope.endDateTime = new Date(e.endDateTime);
+                        },
+                        templateUrl: "/templates/add_event.html",
+                        parent: angular.element(document.body),
+                        targetEvent: event,
+                        clickOutsideToClose: true
+                    })
+                        .then(function (data) {
+                            $http.put("http://localhost:10010/events/" + e.id, {
+                                "name": data[0],
+                                "description": data[1],
+                                "startDateTime": data[2].toISOString(),
+                                "endDateTime": data[3].toISOString()
+                            });
+                        }, function () { });
+                };
+            })
+            .controller("CalendarController", function ($scope) {
+                $scope.date = null;
+                $scope.log = function () {
+                    console.log($scope.date);
+                }
+                $scope.filter = function(date) {
+                    return true;
+                }
             })
             .controller("ToolbarController", function ($scope, $http, $mdDialog) {
                 $scope.showAddDialog = function (event) {
@@ -133,6 +192,15 @@
                     }, function() {
                     });
                 };
+            })
+            .config(function($mdDateLocaleProvider) {
+                $mdDateLocaleProvider.months = ['styczeń', 'luty', 'marzec', 'kwiecień','maj','czerwiec',
+                    'lipiec','sierpień','wrzesień','październik','listopad','grudzień'];
+                $mdDateLocaleProvider.shortMonths = ['sty', 'lu', 'mar', 'kwi','maj','cze',
+                    'lip','sie','wrze','paź','lis','gru'];
+                $mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek','piątek','sobota'];
+                $mdDateLocaleProvider.shortDays = ['nd', 'pn', 'wt', 'śr', 'czw','pt','sb'];
+                $mdDateLocaleProvider.firstDayOfWeek = 1;
             });
     </script>
 </body>
