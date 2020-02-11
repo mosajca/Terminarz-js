@@ -15,9 +15,10 @@
             <input type="datetime-local" min="2000-01-01T00:00" max="2100-01-01T00:00" ng-model="endDateTime"
                 placeholder="Koniec" required>
         </md-input-container>
+        <md-checkbox ng-model="public" class="md-primary">publiczne</md-checkbox>
     </md-dialog-content>
     <md-dialog-actions>
-        <md-button ng-click="addEvent([name, description, startDateTime, endDateTime])" class="md-primary"
+        <md-button ng-click="addEvent([name, description, startDateTime, endDateTime, public])" class="md-primary"
             ng-disabled="!(name && startDateTime && endDateTime)">Dodaj</md-button>
         <md-button ng-click="cancel()" class="md-primary">Anuluj</md-button>
     </md-dialog-actions>

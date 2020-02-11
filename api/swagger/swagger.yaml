@@ -276,6 +276,8 @@ definitions:
       endDateTime:
         type: string
         format: date-time
+      public:
+        type: boolean
   EventListResponse:
     properties:
       events:
@@ -295,6 +297,8 @@ definitions:
       endDateTime:
         type: string
         format: date-time
+      public:
+        type: boolean
   UserResponse:
     type: object
     properties:

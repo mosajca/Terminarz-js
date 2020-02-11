@@ -8,6 +8,7 @@ var Event = thinkagain.createModel('Event', {
         description: { type: 'string' },
         startDateTime: { type: 'string', format:'date-time' },
         endDateTime: { type: 'string', format:'date-time' },
+        public: { type: 'boolean' },
         userId: { type: 'string' }
     },
     required: [ 'name', 'startDateTime', 'endDateTime' ]

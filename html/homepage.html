@@ -33,6 +33,11 @@
             <div ng-controller="CalendarController">
                 <md-calendar ng-model="date" ng-change="log()" md-date-filter="filter"></md-calendar>
             </div>
+            <div class="md-padding">
+                <md-checkbox class="md-primary">publiczne</md-checkbox>
+                <md-checkbox class="md-primary">moje publiczne</md-checkbox>
+                <md-checkbox class="md-primary">prywatne</md-checkbox>
+            </div>
         </md-sidenav>
         <md-content id="content" flex>
             <md-list ng-controller="EventController">
@@ -89,6 +94,7 @@
                             $scope.description = e.description;
                             $scope.startDateTime = new Date(e.startDateTime);
                             $scope.endDateTime = new Date(e.endDateTime);
+                            $scope.public = e.public;
                         },
                         templateUrl: "/templates/add_event.html",
                         parent: angular.element(document.body),
@@ -100,7 +106,8 @@
                                 "name": data[0],
                                 "description": data[1],
                                 "startDateTime": data[2].toISOString(),
-                                "endDateTime": data[3].toISOString()
+                                "endDateTime": data[3].toISOString(),
+                                "public": data[4]
                             });
                         }, function () { });
                 };
@@ -124,6 +131,7 @@
                             $scope.description = null;
                             $scope.startDateTime = null;
                             $scope.endDateTime = null;
+                            $scope.public = false;
                         },
                         templateUrl: "/templates/add_event.html",
                         parent: angular.element(document.body),
@@ -135,7 +143,8 @@
                                 "name": data[0],
                                 "description": data[1],
                                 "startDateTime": data[2].toISOString(),
-                                "endDateTime": data[3].toISOString()
+                                "endDateTime": data[3].toISOString(),
+                                "public": data[4]
                             });
                         }, function () { });
                 };
