@@ -9,8 +9,23 @@ module.exports = {
     readUsers,
     updateUser,
     deleteUser,
-    logout
+    logout,
+    user
 };
+
+function user(req, res, next) {
+    if(req.session == null) {
+        res.json({
+            name: null,
+            id: null
+        });
+    } else {
+        res.json({
+            name: req.session.userName,
+            id: req.session.userId
+        });
+    }
+}
 
 function logout(req, res, next) {
     req.session = null;
@@ -34,6 +49,7 @@ function readUser(req, res, next) {
         .run().then(
         function (result) {
             req.session.userId = result[0].id;
+            req.session.userName = result[0].name;
             res.json(result[0]);
         }
     );

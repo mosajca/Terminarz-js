@@ -161,6 +161,19 @@ paths:
             description: Error
             schema:
               $ref: "#/definitions/ErrorResponse"
+  /userdata:
+    x-swagger-router-controller: user
+    get:
+      operationId: user
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/UserResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /users:
       x-swagger-router-controller: user
       get:
