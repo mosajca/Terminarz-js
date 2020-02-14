@@ -11,7 +11,7 @@ module.exports = {
 };
 
 function homepage(req, res, next) {
-    const file = path.join(__dirname, '..', '..', 'html', 'homepage.html');
+    const file = path.join(__dirname, '..', '..', 'public', 'html', 'homepage.html');
     const contents = fs.readFileSync(file, 'utf8');
     res.contentType('text/html');
     res.send(contents);
@@ -26,7 +26,7 @@ function material_css(req, res, next) {
 
 function templates(req, res, next) {
     const name = req.swagger.params.name.value;
-    const file = path.join(__dirname, '..', '..', 'html', 'templates', name);
+    const file = path.join(__dirname, '..', '..', 'public', 'html', 'templates', name);
     const contents = fs.readFileSync(file, 'utf8');
     res.contentType('text/html');
     res.send(contents);

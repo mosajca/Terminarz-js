@@ -5,7 +5,7 @@ module.exports = app; // for testing
 
 var favicon = require('serve-favicon');
 var path = require('path');
-app.use(favicon(path.join(__dirname, 'html', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 var session = require('express-session');
 var MemoryStore = require('memorystore')(session);
