@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="utf-8">
+    <title>Terminarz</title>
+    <link rel="stylesheet" href="/angular-material.min.css">
+    <link rel="icon" href="/favicon.ico">
+</head>
+
+<body ng-app="App" layout="column">
+
+    <md-toolbar ng-controller="ToolbarController">
+        <div class="md-toolbar-tools">
+            <h2 flex>Terminarz <span ng-if="user.name && user.id">{{user.name}}</span></h2>
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showAddDialog($event)" ng-if="user.name && user.id">
+                Dodaj wydarzenie
+            </md-button>
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showLoginDialog($event)" ng-if="!(user.name && user.id)">
+                Zaloguj
+            </md-button>
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showRegisterDialog($event)" ng-if="!(user.name && user.id)">
+                Zarejestruj
+            </md-button>
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showLogoutDialog($event)" ng-if="user.name && user.id">
+                Wyloguj
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <div class="container" layout="row" flex>
+        <md-sidenav md-is-locked-open="true">
+            <div ng-controller="CalendarController">
+                <md-calendar ng-model="date" ng-change="log()" md-date-filter="filter"></md-calendar>
+            </div>
+            <div class="md-padding" ng-if="user.name && user.id">
+                <md-checkbox class="md-primary">publiczne</md-checkbox>
+                <md-checkbox class="md-primary">moje publiczne</md-checkbox>
+                <md-checkbox class="md-primary">prywatne</md-checkbox>
+            </div>
+        </md-sidenav>
+        <md-content id="content" flex>
+            <md-list ng-controller="EventController">
+                <md-list-item ng-repeat="e in events">
+                    <md-card style="width: 100%">
+                        <md-card-title>
+                            <md-card-title-text>
+                                <span class="md-headline">{{e.name}}</span>
+                            </md-card-title-text>
+                        </md-card-title>
+                        <md-card-content>
+                            <p>{{e.startDateTime | date:'dd/MM/yyyy HH:mm'}} - {{e.endDateTime | date:'dd/MM/yyyy HH:mm'}}</p>
+                            <p>{{e.description}}</p>
+                        </md-card-content>
+                        <md-card-actions layout="row" layout-align="end center" ng-if="(user.name && user.id) && user.id === e.userId">
+                            <md-button ng-click="showEditDialog($event, e)">Edytuj</md-button>
+                            <md-button ng-click="showDeleteDialog($event, e.id)">Usuń</md-button>
+                        </md-card-actions>
+                    </md-card>
+                </md-list-item>
+            </md-list>
+        </md-content>
+    </div>
+
+    <script src="/angular.min.js"></script>
+    <script src="/angular-animate.min.js"></script>
+    <script src="/angular-aria.min.js"></script>
+    <script src="/angular-material.min.js"></script>
+    <script src="/script.js"></script>
+</body>
+
+</html>
