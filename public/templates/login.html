@@ -1,6 +1,7 @@
 <md-dialog>
     <md-dialog-content class="md-dialog-content">
         <h2>Zaloguj</h2>
+        <p ng-if="error" style="color: red">{{error}}</p>
         <md-input-container class="md-block">
             <input type="text" ng-model="name" placeholder="Nazwa użytkownika" required>
         </md-input-container>
@@ -9,8 +10,8 @@
         </md-input-container>
     </md-dialog-content>
     <md-dialog-actions>
+        <md-button ng-click="cancel()" class="md-primary">Anuluj</md-button>
         <md-button ng-click="login([name, password])" class="md-primary"
             ng-disabled="!(name && password)">Zaloguj</md-button>
-        <md-button ng-click="cancel()" class="md-primary">Anuluj</md-button>
     </md-dialog-actions>
 </md-dialog>

@@ -1,6 +1,6 @@
 const thinkagain = require('thinkagain')();
 
-var Event = thinkagain.createModel('Event', {
+const Event = thinkagain.createModel('Event', {
     type: 'object',
     properties: {
         id: { type: 'string' },
@@ -15,7 +15,7 @@ var Event = thinkagain.createModel('Event', {
 });
 exports.Event = Event;
 
-var User = thinkagain.createModel('User', {
+const User = thinkagain.createModel('User', {
     type: 'object',
     properties: {
         id: { type: 'string' },

@@ -20,14 +20,15 @@ angular.module("App", ["ngMaterial"])
             $mdDialog.show({
                 controller: function ($scope, $mdDialog) {
                     $scope.cancel = function () { $mdDialog.cancel(); }
-                    $scope.addEvent = function (data) { $mdDialog.hide(data); }
+                    $scope.ok = function (data) { $mdDialog.hide(data); }
                     $scope.name = e.name;
                     $scope.description = e.description;
                     $scope.startDateTime = new Date(e.startDateTime);
                     $scope.endDateTime = new Date(e.endDateTime);
                     $scope.public = e.public;
+                    $scope.action = "Edytuj";
                 },
-                templateUrl: "/templates/add_event.html",
+                templateUrl: "/templates/event.html",
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose: true
@@ -57,14 +58,15 @@ angular.module("App", ["ngMaterial"])
             $mdDialog.show({
                 controller: function ($scope, $mdDialog) {
                     $scope.cancel = function () { $mdDialog.cancel(); }
-                    $scope.addEvent = function (data) { $mdDialog.hide(data); }
+                    $scope.ok = function (data) { $mdDialog.hide(data); }
                     $scope.name = null;
                     $scope.description = null;
                     $scope.startDateTime = null;
                     $scope.endDateTime = null;
                     $scope.public = false;
+                    $scope.action = "Dodaj";
                 },
-                templateUrl: "/templates/add_event.html",
+                templateUrl: "/templates/event.html",
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose: true
@@ -105,7 +107,7 @@ angular.module("App", ["ngMaterial"])
                     $scope.cancel = function () { $mdDialog.cancel(); }
                     $scope.register = function (data) { $mdDialog.hide(data); }
                     $scope.name = null;
-                    $scope.password1 = null;
+                    $scope.password = null;
                     $scope.password2 = null;
                 },
                 templateUrl: "/templates/register.html",

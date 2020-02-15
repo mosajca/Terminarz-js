@@ -1,6 +1,5 @@
 'use strict';
 
-const model = require('../model/model.js');
 const r = require('thinkagain')().r;
 
 module.exports = {
