@@ -103,34 +103,10 @@ paths:
             description: Error
             schema:
               $ref: "#/definitions/ErrorResponse"
-  /userdata:
-    x-swagger-router-controller: user
-    get:
-      operationId: user
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/UserResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
   /users:
       x-swagger-router-controller: user
-      get:
-        operationId: readUsers
-        responses:
-          "200":
-            description: Success
-            schema:
-              $ref: "#/definitions/UserListResponse"
-          default:
-            description: Error
-            schema:
-              $ref: "#/definitions/ErrorResponse"
       post:
-        operationId: createUser
+        operationId: register
         parameters:
           - name: user
             in: body
@@ -146,35 +122,8 @@ paths:
             description: Error
             schema:
               $ref: "#/definitions/ErrorResponse"
-      delete:
-        operationId: logout
-        responses:
-          "200":
-            description: Success
-            schema:
-              type: string
-          default:
-            description: Error
-            schema:
-              $ref: "#/definitions/ErrorResponse"
   /users/{id}:
       x-swagger-router-controller: user
-      get:
-        operationId: readUser
-        parameters:
-          - name: id
-            type: string
-            in: path
-            required: true
-        responses:
-          "200":
-            description: Success
-            schema:
-              $ref: "#/definitions/UserResponse"
-          default:
-            description: Error
-            schema:
-              $ref: "#/definitions/ErrorResponse"
       put:
         operationId: updateUser
         parameters:
@@ -261,14 +210,6 @@ definitions:
         type: string
       name:
         type: string
-      password:
-        type: string
-  UserListResponse:
-    properties:
-      users:
-        type: array
-        items:
-          $ref: "#/definitions/UserResponse"
   User:
     type: object
     properties:

@@ -95,10 +95,6 @@ angular.module("App", ["ngMaterial"])
                 clickOutsideToClose: true
             })
                 .then(function (data) {
-                    $http.get("http://localhost:10010/users/" + data[0])
-                        .then(function (response) {
-                            console.log(response);
-                        });
                 }, function () { });
         };
         $scope.showRegisterDialog = function (event) {
@@ -130,7 +126,6 @@ angular.module("App", ["ngMaterial"])
               .cancel('Anuluj');
 
             $mdDialog.show(confirm).then(function() {
-              $http.delete("http://localhost:10010/users");
             }, function() {
             });
         };
@@ -143,10 +138,4 @@ angular.module("App", ["ngMaterial"])
         $mdDateLocaleProvider.days = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek','piątek','sobota'];
         $mdDateLocaleProvider.shortDays = ['nd', 'pn', 'wt', 'śr', 'czw','pt','sb'];
         $mdDateLocaleProvider.firstDayOfWeek = 1;
-    })
-    .run(function($rootScope, $http){
-        $http.get("http://localhost:10010/userdata")
-            .then(function (response) {
-                $rootScope.user = response.data;
-            });
     });

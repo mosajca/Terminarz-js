@@ -12,7 +12,6 @@ module.exports = {
 
 function createEvent(req, res, next) {
     const value = req.swagger.params.event.value;
-    value.userId = req.session.userId;
     r.db('Schedule').table('Event').insert(
             value, {returnChanges: true}
         ).run().then(
