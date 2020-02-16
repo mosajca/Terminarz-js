@@ -12,17 +12,17 @@
 
     <md-toolbar ng-controller="ToolbarController">
         <div class="md-toolbar-tools">
-            <h2 flex>Terminarz <span ng-if="user.name && user.id">{{user.name}}</span></h2>
-            <md-button class="md-primary md-raised md-hue-1" ng-click="showAddDialog($event)" ng-if="user.name && user.id">
+            <h2 flex>Terminarz <span ng-show="user">{{user.name}}</span></h2>
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showAddDialog($event)" ng-show="user">
                 Dodaj wydarzenie
             </md-button>
-            <md-button class="md-primary md-raised md-hue-1" ng-click="showLoginDialog($event)" ng-if="!(user.name && user.id)">
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showLoginDialog($event)" ng-hide="user">
                 Zaloguj
             </md-button>
-            <md-button class="md-primary md-raised md-hue-1" ng-click="showRegisterDialog($event)" ng-if="!(user.name && user.id)">
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showRegisterDialog($event)" ng-hide="user">
                 Zarejestruj
             </md-button>
-            <md-button class="md-primary md-raised md-hue-1" ng-click="showLogoutDialog($event)" ng-if="user.name && user.id">
+            <md-button class="md-primary md-raised md-hue-1" ng-click="showLogoutDialog($event)" ng-show="user">
                 Wyloguj
             </md-button>
         </div>
@@ -31,12 +31,14 @@
     <div class="container" layout="row" flex>
         <md-sidenav md-is-locked-open="true">
             <div ng-controller="CalendarController">
-                <md-calendar ng-model="date" ng-change="log()" md-date-filter="filter"></md-calendar>
-            </div>
-            <div class="md-padding" ng-if="user.name && user.id">
-                <md-checkbox class="md-primary">publiczne</md-checkbox>
-                <md-checkbox class="md-primary">moje publiczne</md-checkbox>
-                <md-checkbox class="md-primary">prywatne</md-checkbox>
+                <div>
+                    <md-calendar ng-model="date" ng-change="log()" md-date-filter="filter"></md-calendar>
+                </div>
+                <div class="md-padding" ng-show="user">
+                    <md-checkbox class="md-primary" ng-model="public" ng-change="log()">publiczne</md-checkbox>
+                    <md-checkbox class="md-primary" ng-model="myPublic" ng-change="log()">moje publiczne</md-checkbox>
+                    <md-checkbox class="md-primary" ng-model="private" ng-change="log()">prywatne</md-checkbox>
+                </div>
             </div>
         </md-sidenav>
         <md-content id="content" flex>
@@ -51,8 +53,9 @@
                         <md-card-content>
                             <p>{{e.startDateTime | date:'dd/MM/yyyy HH:mm'}} - {{e.endDateTime | date:'dd/MM/yyyy HH:mm'}}</p>
                             <p>{{e.description}}</p>
+                            <p>{{e.userName}}</p>
                         </md-card-content>
-                        <md-card-actions layout="row" layout-align="end center" ng-if="(user.name && user.id) && user.id === e.userId">
+                        <md-card-actions layout="row" layout-align="end center" ng-show="user && user.name === e.userName">
                             <md-button ng-click="showEditDialog($event, e)">Edytuj</md-button>
                             <md-button ng-click="showDeleteDialog($event, e.id)">Usuń</md-button>
                         </md-card-actions>

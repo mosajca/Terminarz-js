@@ -10,28 +10,53 @@ module.exports = {
     deleteEvent
 };
 
-function createEvent(req, res, next) {
-    const value = req.swagger.params.event.value;
-    r.db('Schedule').table('Event').insert(
-            value, {returnChanges: true}
-        ).run().then(
-        function (result) {
-            res.json(get_new(result));
-        }
-    );
+function createEvent(req, res) {
+    const user = req.authenticatedUser;
+    if (!user) {
+        res.status(401).json();
+    } else {
+        const value = req.swagger.params.event.value;
+        value.userName = user.name;
+        r.db('Schedule').table('Event').insert(
+                value, {returnChanges: true}
+            ).run().then(
+            function (result) {
+                res.json(get_new(result));
+            }
+        ).catch(function (error) {
+            res.status(500).json();
+        });
+    }
 }
 
-function readEvent(req, res, next) {
+function readEvent(req, res) {
+    const user = req.authenticatedUser;
     r.db('Schedule').table('Event')
         .get(req.swagger.params.id.value)
-        .run().then(
-        function (result) {
-            res.json(result);
+        .run().then(function (result) {
+            if (result) {
+                if (result.public || result.userName === user.name) {
+                    res.json(result);
+                } else {
+                    res.status(403).json();
+                }
+            } else {
+                res.status(404).json();
+            }
         }
-    );
+    ).catch(function (error) {
+        res.status(500).json();
+    });
 }
 
-function readEvents(req, res, next) {
+function readEvents(req, res) {
+    const query = req.query;
+    if (query.time) {
+        console.log(query.time);
+    }
+    if (query.visibility) {
+        console.log(query.visibility);
+    }
     r.db('Schedule').table('Event')
         .run().then(
         function (result) {
@@ -40,24 +65,59 @@ function readEvents(req, res, next) {
     );
 }
 
-function updateEvent(req, res, next) {
-    r.db('Schedule').table('Event').get(req.swagger.params.id.value)
-        .update(req.swagger.params.event.value, {returnChanges: true})
-        .run().then(
-        function (result) {
-            res.json(get_new(result));
-        }
-    );
+function updateEvent(req, res) {
+    const user = req.authenticatedUser;
+    const event = req.swagger.params.event.value;
+    const eventId = req.swagger.params.id.value;
+    event.userName = user.name;
+    if(!user) {
+        res.status(403).json();
+    } else {
+        r.db('Schedule').table('Event').get(eventId).run()
+            .then(function (result) {
+                if (result) {
+                    if (result.userName === user.name) {
+                        r.db('Schedule').table('Event').get(eventId)
+                        .update(event, {returnChanges: true})
+                        .run().then(
+                            function (result) {
+                                res.json(get_new(result));
+                            }).catch(function (error) {
+                                res.status(500).json();
+                            });
+                    } else {
+                        res.status(403).json();
+                    }
+                } else {
+                    res.status(404).json();
+                }
+            }).catch(function (error) {
+                res.status(500).json();
+            });
+    }
 }
 
-function deleteEvent(req, res, next) {
-    r.db('Schedule').table('Event')
-        .get(req.swagger.params.id.value).delete({returnChanges: true})
-        .run().then(
-        function (result) {
-            res.json(get_old(result));
+function deleteEvent(req, res) {
+    const user = req.authenticatedUser;
+    const eventId = req.swagger.params.id.value;
+    r.db('Schedule').table('Event').get(eventId).run().then(function (result) {
+        if (result) {
+            if (result.userName === user.name) {
+                r.db('Schedule').table('Event').get(eventId).delete({returnChanges: true})
+                    .run().then(function (result) {
+                        res.json(get_old(result));
+                    }).catch(function (error) {
+                        res.status(500).json();
+                    });
+            } else {
+                res.status(403).json();
+            }
+        } else {
+            res.status(404).json();
         }
-    );
+    }).catch(function (error) {
+        res.status(500).json();
+    });
 }
 
 function get_new(result) {
