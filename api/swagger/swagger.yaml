@@ -22,6 +22,15 @@ paths:
       x-swagger-router-controller: event
       get:
         operationId: readEvents
+        parameters:
+          - name: time
+            in: query
+            required: true
+            type: integer
+          - name: visibility
+            in: query
+            required: false
+            type: integer
         responses:
           "200":
             description: Success
@@ -40,7 +49,7 @@ paths:
             schema:
               $ref: "#/definitions/Event"
         responses:
-          "200":
+          "201":
             description: Success
             schema:
               $ref: "#/definitions/EventResponse"
@@ -132,7 +141,7 @@ paths:
             in: path
             required: true
         responses:
-          "200":
+          "201":
             description: Success
             schema:
               $ref: "#/definitions/UserResponse"
@@ -156,7 +165,7 @@ paths:
           "200":
             description: Success
             schema:
-              $ref: "#/definitions/UserResponse"
+              $ref: "#/definitions/SuccessResponse"
           default:
             description: Error
             schema:
@@ -172,7 +181,7 @@ paths:
           "200":
             description: Success
             schema:
-              $ref: "#/definitions/UserResponse"
+              $ref: "#/definitions/SuccessResponse"
           default:
             description: Error
             schema:
@@ -236,7 +245,6 @@ definitions:
     properties:
       password:
         type: string
-
   ErrorResponse:
     properties:
       message:

@@ -1,5 +1,20 @@
 'use strict';
 
+var r = require('thinkagain')().r;
+r.dbList().contains('Schedule').run().then(function (contains) {
+    if (!contains) {
+        r.expr([
+            r.dbCreate('Schedule'),
+            r.db('Schedule').tableCreate('User', { primaryKey: 'name' }),
+            r.db('Schedule').tableCreate('Event')
+        ]).run().then(function (result) {}).catch(function (error) {
+            console.log(error);
+        });
+    }
+}).catch(function (error) {
+    console.log(error);
+});
+
 var app = require('express')();
 module.exports = app; // for testing
 
@@ -34,7 +49,6 @@ app.get('/angular-material.min.js', function (req, res) {
 
 var auth = require('basic-auth');
 var bcrypt = require('bcryptjs');
-var r = require('thinkagain')().r;
 app.use(async function (req, res, next) {
     try {
         const authData = auth(req);

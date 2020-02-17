@@ -6,10 +6,14 @@
     <title>Terminarz</title>
     <link rel="stylesheet" href="/angular-material.min.css">
     <link rel="icon" href="/favicon.ico">
+    <script src="/angular.min.js"></script>
+    <script src="/angular-animate.min.js"></script>
+    <script src="/angular-aria.min.js"></script>
+    <script src="/angular-material.min.js"></script>
+    <script src="/script.js"></script>
 </head>
 
 <body ng-app="App" layout="column">
-
     <md-toolbar ng-controller="ToolbarController">
         <div class="md-toolbar-tools">
             <h2 flex>Terminarz <span ng-show="user">{{user.name}}</span></h2>
@@ -32,12 +36,12 @@
         <md-sidenav md-is-locked-open="true">
             <div ng-controller="CalendarController">
                 <div>
-                    <md-calendar ng-model="date" ng-change="log()" md-date-filter="filter"></md-calendar>
+                    <md-calendar ng-model="date" ng-change="getEvents()"></md-calendar>
                 </div>
                 <div class="md-padding" ng-show="user">
-                    <md-checkbox class="md-primary" ng-model="public" ng-change="log()">publiczne</md-checkbox>
-                    <md-checkbox class="md-primary" ng-model="myPublic" ng-change="log()">moje publiczne</md-checkbox>
-                    <md-checkbox class="md-primary" ng-model="private" ng-change="log()">prywatne</md-checkbox>
+                    <md-checkbox class="md-primary" ng-model="public" ng-change="getEvents()">publiczne</md-checkbox>
+                    <md-checkbox class="md-primary" ng-model="myPublic" ng-change="getEvents()">moje publiczne</md-checkbox>
+                    <md-checkbox class="md-primary" ng-model="private" ng-change="getEvents()">prywatne</md-checkbox>
                 </div>
             </div>
         </md-sidenav>
@@ -64,12 +68,6 @@
             </md-list>
         </md-content>
     </div>
-
-    <script src="/angular.min.js"></script>
-    <script src="/angular-animate.min.js"></script>
-    <script src="/angular-aria.min.js"></script>
-    <script src="/angular-material.min.js"></script>
-    <script src="/script.js"></script>
 </body>
 
 </html>

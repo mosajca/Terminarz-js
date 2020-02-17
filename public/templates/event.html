@@ -20,6 +20,6 @@
     <md-dialog-actions>
         <md-button ng-click="cancel()" class="md-primary">Anuluj</md-button>
         <md-button ng-click="ok([name, description, startDateTime, endDateTime, public])" class="md-primary"
-            ng-disabled="!(name && startDateTime && endDateTime)">{{action}}</md-button>
+            ng-disabled="!(name && startDateTime && endDateTime && (startDateTime < endDateTime))">{{action}}</md-button>
     </md-dialog-actions>
 </md-dialog>
